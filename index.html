@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Two readings of the same police allegation data: an interactive study of ethical and misleading visualization.">
+    <title>Between the Lines · Two Hats, One Dataset</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script defer src="https://d3js.org/d3.v7.min.js"></script>
+    <script defer src="js/script.js"></script>
+</head>
+
+<body>
+    <header class="masthead"><a href="#">Between the Lines</a><span>CMSC 471 · Assignment 02</span></header>
+    <main>
+        <section class="intro">
+            <p class="eyebrow">A study in visual persuasion</p>
+            <h1>Same records.<br>Different <em>stories.</em></h1>
+            <p class="lede">A finding of insufficient evidence is not a finding of innocence. What happens when a
+                visualization blurs that distinction?</p>
+            <div class="intro-bottom">
+                <p>Two interactive readings of civilian allegations against NYPD officers.<br>One makes the distinctions
+                    visible. The other makes them disappear.</p><a class="text-link" href="#white-hat">Explore the
+                    evidence ↓</a>
+            </div>
+        </section>
+        <div class="dataset-strip" aria-label="Dataset overview">
+            <div><strong>33,358</strong><span>allegation records</span></div>
+            <div><strong>12,056</strong><span>distinct complaint IDs</span></div>
+            <div><strong>1985–2020</strong><span>years received in this file</span></div>
+            <div><strong>July 2020</strong><span>historical data release</span></div>
+        </div>
+        <aside class="scope-note"><strong>Read the scope before the story.</strong> This is a selected historical
+            release, not all NYPD complaints. It covers fully investigated allegations involving officers still employed
+            in June 2020 who had at least one substantiated allegation. One complaint can contain multiple allegation
+            records. Neither chart measures the prevalence of misconduct across all police encounters.</aside>
+
+        <section class="hat-section" id="white-hat">
+            <div class="section-heading"><span class="number">01</span>
+                <div>
+                    <p class="eyebrow">White hat · Keep the distinctions</p>
+                    <h2>What did the investigations find?</h2>
+                    <p>Compare outcomes within each allegation category, with uncertainty left intact.</p>
+                </div>
+            </div>
+            <div class="chart-panel">
+                <div class="chart-toolbar">
+                    <div>
+                        <h3>Investigation outcomes by allegation type</h3>
+                        <p id="white-subtitle">Loading the local dataset…</p>
+                    </div><label>Year received<select id="year-select" disabled>
+                            <option value="all">All years · 1985–2020</option>
+                        </select></label>
+                </div>
+                <div class="legend"><span><i class="substantiated"></i>Substantiated</span><span><i
+                            class="unsubstantiated"></i>Unsubstantiated</span><span><i
+                            class="exonerated"></i>Exonerated</span></div>
+                <div id="white-chart" class="chart-scroll" aria-label="Outcome comparison"></div>
+                <p class="chart-note">Each bar totals 100% of the records in that category. Counts at right show the
+                    denominator. Hover or focus a segment for exact values. Small segments may not have a printed label.
+                </p>
+                <p id="filter-summary" class="filter-summary" aria-live="polite"></p>
+            </div>
+            <div class="definitions">
+                <div><span class="definition-dot substantiated"></span>
+                    <h4>Substantiated</h4>
+                    <p>The investigation found sufficient evidence of misconduct.</p>
+                </div>
+                <div><span class="definition-dot unsubstantiated"></span>
+                    <h4>Unsubstantiated</h4>
+                    <p>The evidence did not establish whether misconduct occurred.</p>
+                </div>
+                <div><span class="definition-dot exonerated"></span>
+                    <h4>Exonerated</h4>
+                    <p>The alleged conduct occurred, but was found not to constitute misconduct.</p>
+                </div>
+            </div>
+            <details class="essay" open>
+                <summary>Design notes <span>White-hat write-up</span></summary>
+                <div class="essay-body">
+                    <p>This visualization examines the 33,358 allegation records in the supplied July 2020
+                        police-complaint CSV. The records contain a complaint identifier, the year received, an
+                        allegation category, and a board disposition. The unit of analysis is an allegation record, not
+                        an officer, civilian, or unique complaint. Several records can belong to the same complaint, so
+                        counting rows as separate complaints would inflate that total. The chart asks a limited
+                        question: how are the recorded investigative outcomes distributed within each allegation
+                        category?</p>
+                    <p>To answer it, the application groups records into the four categories supplied in the file. It
+                        combines all disposition labels beginning with “Substantiated” into one outcome, while
+                        preserving “Unsubstantiated” and “Exonerated” as separate outcomes. Within each category, each
+                        outcome count is divided by the total number of records in that category. These percentages
+                        support comparisons across categories with very different record counts. Every horizontal bar
+                        uses the same zero-to-100-percent scale, a consistent category order, and a consistent outcome
+                        order. Counts remain visible beside the bars, and tooltips report both the numerator and
+                        denominator.</p>
+                    <p>The year selector filters by the year a complaint was received, not the year it closed or the
+                        date of the alleged incident. The displayed record total and percentages update together. All
+                        years are included initially; 2020 is only represented through the historical release, so it is
+                        not a complete calendar year. The three muted colors distinguish outcomes without treating
+                        unresolved evidence as a favorable finding. Text definitions and keyboard-accessible tooltips
+                        provide alternatives to relying on color alone.</p>
+                    <p>The source imposes important limits. This release selects officers who were still employed in
+                        June 2020 and had at least one substantiated allegation; it is not a random sample of officers
+                        or encounters. Filed and investigated allegations cannot capture every experience of misconduct,
+                        and a board finding is not a measure of all underlying behavior. Accordingly, the chart
+                        describes this file rather than claiming a citywide misconduct rate, a causal explanation, or a
+                        trend in police conduct.</p>
+                </div>
+            </details>
+        </section>
+
+        <section class="hat-section" id="black-hat">
+            <div class="section-heading"><span class="number">02</span>
+                <div>
+                    <p class="eyebrow">Black hat · An intentionally misleading reading</p>
+                    <h2>When uncertainty becomes reassurance.</h2>
+                    <p>The following presentation is an educational demonstration of manipulation.</p>
+                </div>
+            </div>
+            <div class="black-panel">
+                <div class="report-top"><span>Public confidence briefing</span><span>Historical review / 2020</span>
+                </div>
+                <div class="black-headline">
+                    <div>
+                        <p class="eyebrow">The record in perspective</p>
+                        <h3 id="black-title">Three in four allegations<br>clear officers.</h3>
+                        <p id="black-deck">Across allegation categories, the majority end without a finding of
+                            misconduct.</p>
+                    </div>
+                    <div class="big-stat"><strong id="black-stat">75.1%</strong><span id="black-stat-label">“cleared”
+                            overall</span></div>
+                </div>
+                <div id="black-chart" class="chart-scroll"></div>
+                <p id="black-footnote" class="black-footnote">Share “cleared” by allegation category · All records in
+                    the supplied release</p>
+                <div class="reveal-row"><button id="reveal-button" type="button" aria-pressed="false" disabled>Reveal
+                        the missing distinction ↗</button><span>Same records. Change the framing.</span></div>
+                <div id="reveal-note" class="reveal-note" hidden><strong>The hidden move:</strong> “Cleared” combines
+                    exonerated and unsubstantiated records. Only <strong>28.8%</strong> of all records are exonerated;
+                    <strong>46.3%</strong> are unsubstantiated. Insufficient evidence is not exoneration. The corrected
+                    bars retain the same order and denominator.</div>
+            </div>
+            <details class="essay" open>
+                <summary>Behind the framing <span>Black-hat write-up</span></summary>
+                <div class="essay-body">
+                    <p>The black-hat presentation uses the same complete set of allegation records as the default
+                        white-hat chart. It does not invent observations. Instead, it changes the interpretation of real
+                        outcomes. The headline announces that three in four allegations “clear officers,” and the large
+                        percentage gives that assertion an appearance of quantitative authority. The crucial step occurs
+                        before the bars are drawn: exonerated and unsubstantiated records are added together and labeled
+                        “cleared.” That creates a group of 25,057 records, or 75.1% of the file, even though only 9,609
+                        records, or 28.8%, are actually labeled exonerated.</p>
+                    <p>This aggregation erases an evidentiary distinction. An unsubstantiated outcome means the
+                        investigation could not establish whether misconduct occurred; it does not establish that the
+                        conduct was proper or the allegation false. The headline and outcome label turn uncertainty into
+                        reassurance. The supporting sentence is more restrained, making the stronger headline seem
+                        reasonable while leaving its unjustified inference intact. This combines manipulation of data
+                        transformation with manipulation of titles and labels.</p>
+                    <p>The visual treatment reinforces the message. Categories are sorted from the largest combined
+                        share to the smallest, placing the strongest apparent reassurance first. A warm olive fill gives
+                        every bar a consistent, reassuring appearance. A large overall statistic, restrained typography,
+                        and a briefing-style layout make the presentation feel authoritative. The axes still run from
+                        zero to 100 percent and the arithmetic is accurate: the deception lies in what the encoded
+                        quantity is said to mean, rather than an obvious geometric distortion.</p>
+                    <p>The presentation also gives the selected release a broad institutional framing that can invite
+                        unjustified generalization. It cannot establish how often all officers commit misconduct or how
+                        every complaint ends. The reveal button replaces the misleading combined percentage with the
+                        exonerated percentage, keeping the category order and denominator fixed so the effect of
+                        relabeling is visible. This chart always uses all years, independently of the white-hat filter.
+                        The surrounding educational label and this explanation disclose the deliberate manipulation; the
+                        misleading claim should not be repeated as a factual conclusion.</p>
+                </div>
+            </details>
+        </section>
+
+        <section class="closing-section">
+            <p class="eyebrow">The takeaway</p>
+            <h2>Correct arithmetic.<br><em>Incorrect implication.</em></h2>
+            <p>Before trusting a percentage, ask what was counted, what was combined, and who is missing.</p>
+        </section>
+        <section class="documentation" id="methods">
+            <div>
+                <p class="eyebrow">About the project</p>
+                <h2>Process &amp; transparency</h2>
+            </div>
+            <div class="documentation-content">
+                <h3>Development process</h3>
+                <p>The police allegations dataset was selected because its outcome categories support a direct
+                    comparison between accurate and misleading aggregation. The implementation uses CSV parsing, grouped
+                    counts, band and linear scales, SVG rectangles, data joins, transitions, dropdown filtering, and
+                    tooltips. The two charts share a parsing and summarization pipeline, but deliberately apply
+                    different outcome definitions.</p>
+                <p>The main development tasks were checking the unit of analysis and category totals, designing the
+                    contrasting readings, implementing the interactions, and writing the explanations. The reveal
+                    interaction isolates the effect of changing the outcome definition while holding the records and
+                    denominator constant.</p>
+                <h3>Team contributions</h3>
+                <p>Deep Mistry and Jack Perlman developed this project collaboratively. The assignment’s allowance for
+                    AI-assisted coding gave us the flexibility to explore two different directions before choosing a
+                    final approach. Jack experimented with visualizations of the census-tract gentrification dataset,
+                    while Deep explored the police allegations dataset. We then peer-reviewed each other’s work,
+                    comparing how effectively each approach communicated the data and demonstrated the contrast between
+                    white-hat and black-hat visualization. After this review, we selected Deep’s allegations-based
+                    version as our final submission.</p>
+                <p>AI generated the visualizations from scratch, while we developed drafts of the visualization
+                    write-ups and the extra-credit explanation. We used AI to polish those drafts into clear,
+                    publication-ready text that expressed our ideas and design rationale. For the final delivery,
+                    Deep pushed the project to GitHub and published the webpage through GitHub Pages, while Jack
+                    recorded the demonstration video.</p>
+                <h3>AI usage</h3>
+                <p>OpenAI Codex assisted with interpreting the dataset, reviewing techniques from earlier labs, and
+                    exploring visualization ideas. AI generated the visualizations from scratch, including the
+                    HTML, CSS, and D3 implementation, and assisted with source lookup and implementation checks.
+                    We supplied written drafts for the visualization explanations and extra-credit discussion;
+                    AI helped refine their organization, wording, and clarity. Our contributions included exploring
+                    alternative datasets, peer-reviewing the resulting visualizations, selecting the final approach,
+                    developing the written arguments, and preparing the published webpage and demonstration video.
+                    This disclosure documents AI assistance and does not claim AI-specific extra credit.</p>
+                <h3>Extra credit work</h3>
+                <p>The “Reveal the missing distinction” control turns the black-hat visualization into an interactive
+                    demonstration of how aggregation can change a story. Initially, the chart combines unsubstantiated
+                    and exonerated allegations under the misleading label “cleared,” producing an overall figure of
+                    75.1%. Clicking the control switches the calculation to exonerated allegations alone, reducing
+                    that figure to 28.8%. The bars transition to their corrected lengths, and the headline, overall
+                    percentage, outcome labels in tooltips, and explanatory caption update
+                    together. An accompanying explanation identifies the missing 46.3% as unsubstantiated allegations:
+                    cases where the evidence did not establish whether misconduct occurred.</p>
+                <p>The comparison deliberately keeps the underlying records, category order, zero-to-100-percent
+                    scale, and denominator for each category fixed. Only the outcome grouping and its framing change.
+                    This lets viewers isolate the effect of combining categories instead of wondering whether a
+                    different sample or a rescaled axis caused the change. The control is reversible, so viewers can
+                    compare the misleading and corrected versions repeatedly. Tooltips provide exact counts and
+                    percentages in both states, and keyboard access and reduced-motion support make the interaction
+                    usable without requiring a mouse or animation.</p>
+                <p>This feature goes beyond presenting the two required visualizations and explaining them in text:
+                    it adds a directly inspectable correction within the misleading chart itself. Viewers can see how
+                    mathematically accurate numbers support an unjustified conclusion when uncertainty is relabeled
+                    as exoneration. The educational contribution is this controlled, reversible comparison, rather
+                    than animation alone. If requesting extra credit, this interaction should also be declared in the
+                    Canvas submission under “Extra Credit Features,” with its purpose and implementation described;
+                    inclusion on this webpage does not guarantee extra-credit approval.</p>
+                <h3>Data &amp; references</h3>
+                <ol class="references">
+                    <li><a href="data/allegations_202007271729.csv">Supplied allegation dataset (CSV)</a> — the local
+                        file used for both charts; 33,358 records. No demographic or individual-officer information is
+                        displayed.</li>
+                    <li><a href="https://projects.propublica.org/nypd-ccrb/">ProPublica, The NYPD Files</a> — July 2020
+                        release and source context. <a href="https://projects.propublica.org/nypd-ccrb/apu">Release
+                            scope</a> explains the selection of fully investigated allegations and officers.</li>
+                    <li><a href="https://www.nyc.gov/assets/ccrb/downloads/pdf/about_pdf/ccrb_rules.pdf">NYC Civilian
+                            Complaint Review Board, rules effective April 11, 2013</a> — historical definitions of
+                        substantiated, unsubstantiated, and exonerated. The charts retain the terminology in this
+                        historical file.</li>
+                    <li>Course examples: Lab 2 (bars, scales, axes), Lab 3 (data joins and transitions), Labs 4–5 (CSV
+                        loading, filters, tooltips), and Lab 8 (grouping, percentages, keyboard interactions).
+                        Implemented with <a href="https://d3js.org/">D3.js v7</a>.</li>
+                </ol>
+            </div>
+        </section>
+    </main>
+    <footer><span>Between the Lines · CMSC 471</span><a href="#">Back to top ↑</a></footer>
+    <div id="tooltip" class="tooltip" role="tooltip" hidden></div>
+    <noscript>
+        <p class="scope-note">Enable JavaScript to load the data and interactive charts.</p>
+    </noscript>
+</body>
+
+</html>
